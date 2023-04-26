@@ -37,10 +37,14 @@ jobs:
        # version_label: 12345
         #region: ap-south-1
        # deployment_package: deploy.zip
+    - name: Install AWS EB CLI
+      run: |
+        sudo apt-get update && sudo-apt-get install -y python3-pip
+        sudo pip3 install awsebcli
     - name: Deploy to Elastic Beanstalk
       run: |
         eb init -p docker my-app --region ap-south-1
-        eb deploy my-env
+        eb deploy my-env --staged --label "github-actions"
      
     ###################################################
 #     - name: Checkout source code
