@@ -44,8 +44,8 @@ jobs:
         sudo pip3 install awsebcli
     - name: Deploy to Elastic Beanstalk
       run: |
-        eb init -p docker Sentiment Analysis --region ap-south-1
-        eb deploy SentimentAnalysis-env --staged --label "github-actions"
+        eb init -p docker Sentiment-analysis --region ap-south-1
+        eb deploy Sentiment-analysis-env --staged --label "github-actions"
      
     ###################################################
 #     - name: Checkout source code
