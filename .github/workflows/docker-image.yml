@@ -70,7 +70,7 @@ jobs:
         environment_name: Sentiment-analysis-env
         version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
         region: ap-south-1
-        deployment_package: deploy.zip
+        #deployment_package: deploy.zip
     
       
       #####Elastic Beanstalk##########################
