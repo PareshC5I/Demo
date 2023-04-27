@@ -34,21 +34,18 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
-        
-    - name: Install AWS EB CLI
-      run: |
-        sudo apt-get update && sudo apt-get install -y python3-pip
-        sudo pip3 install awscli
-        sudo pip3 install awsebcli
-      
-    - name: Initialize EB CLI
-      run: |
-       eb init -r ap-south-1 -p docker Sentiment-analysis
-       eb use SentimentAnalysis-env
-      
-    - name: Deploy docker image to AWS EB
-      run: |
-        eb deploy ${{ secrets.DOCKER_USERNAME }}/demo_app:latest --staged
+    
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: "Sentiment-analysis"
+        environment_name: "Sentiment-analysis-env"
+        version_label: "v5"
+        region: "ap-south-1"
+        docker_image: "${{ secrets.DOCKER_USERNAME }}/demo_app:latest"
+    
       
       #####Elastic Beanstalk##########################
 #     - name: AWS credentials
