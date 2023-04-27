@@ -43,8 +43,8 @@ jobs:
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
     - name: Push the Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
-#     - name: Pull the Docker image
-#       run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
+    - name: Pull the Docker image
+      run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
 
 
 #     - name: Get Timestamp
@@ -101,6 +101,12 @@ jobs:
 # #         eb deploy Sentiment-analysis-env --staged --label "github-actions"
      
     ###################################################
+    - name: Save Docker image as tar
+      run: | 
+        docker save ${{ secrets.DOCKER_USERNAME }}/demo_app:latest -o my-docker-image.tar 
+    
+    - name: Upload image to S3 
+      run: aws s3 cp my-docker-image.tar s3://pod2-demo2/my-docker-image.tar
     
     - name: AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -110,23 +116,20 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
         
-    - name: Create S3 source bundle
-      run: |
-        DOCKER_IMAGE="${{ secrets.DOCKER_USERNAME }}/demo_app:latest" 
-        DOCKER_IMAGE_SHA=$(docker inspect --format='{{index .RepoDigests 0}}' $DOCKER_IMAGE)
-        zip -r $GITHUB_SHA.zip . 
-        aws s3 cp $GITHUB_SHA.zip s3://pod2-demo2/$GITHUB_SHA.zip
+    - name: Download S3 object 
+      uses: aws-actions/download-s3-object@v1 
+      with: 
+        bucket-name: pod2-demo2
+        object-key: my-docker-image.tar
+        path: /tmp/my-docker-image.tar
+    - name: Deploy to Elastic Beanstalk 
+      uses: aws-actions/elastic-beanstalk-deploy@v1 
+      with: 
+        application-name: Sentiment-analysis
+        environment-name: Sentiment-analysis-env
+        version-label: my-version 
+        package: /tmp/my-docker-image.tar
         
-    - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v21
-      with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: Sentiment-analysis
-        environment_name: Sentiment-analysis-env
-        version_label: $GITHUB_SHA
-        region: ap-south-1
-        deployment_package: S3
-        s3_bucket: pod2-demo2
-        s3_key: $GITHUB_SHA.zip
+        
+        
 
