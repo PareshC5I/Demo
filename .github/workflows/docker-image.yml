@@ -43,39 +43,39 @@ jobs:
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
     - name: Push the Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
-    - name: Pull the Docker image
-      run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
+#     - name: Pull the Docker image
+#       run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
 
 
-#     - name: Get Timestamp
-#       uses: gerred/actions/current-time@master
-#       id: current-time
+    - name: Get Timestamp
+      uses: gerred/actions/current-time@master
+      id: current-time
 
-#     - name: Run String Replace
-#       uses: frabert/replace-string-action@master
-#       id: format-time
-#       with:
-#         pattern: '[:\.]+'
-#         string: "${{ steps.current-time.outputs.time }}"
-#         replace-with: '-'
-#         flags: 'g'
+    - name: Run String Replace
+      uses: frabert/replace-string-action@master
+      id: format-time
+      with:
+        pattern: '[:\.]+'
+        string: "${{ steps.current-time.outputs.time }}"
+        replace-with: '-'
+        flags: 'g'
         
       ########################################################new#################
       
-#     - name: Generate deployment package
-#       #run: zip -r deploy.zip * -x "**node_modules**"
-#       run: zip -r deploy.zip . -x '*.git*'
+    - name: Generate deployment package
+      #run: zip -r deploy.zip * -x "**node_modules**"
+      run: zip -r deploy.zip . -x '*.git*'
 
-#     - name: Deploy to EB
-#       uses: einaregilsson/beanstalk-deploy@v21
-#       with:
-#         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         application_name: Sentiment-analysis
-#         environment_name: Sentiment-analysis-env
-#         version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
-#         region: ap-south-1
-#         deployment_package: deploy.zip
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: Sentiment-analysis
+        environment_name: Sentiment-analysis-env
+        version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
+        region: ap-south-1
+        deployment_package: deploy.zip
     
       
       #####Elastic Beanstalk##########################
@@ -101,34 +101,6 @@ jobs:
 # #         eb deploy Sentiment-analysis-env --staged --label "github-actions"
      
     ###################################################
-    - name: Save Docker image as tar
-      run: | 
-        docker save ${{ secrets.DOCKER_USERNAME }}/demo_app:latest -o my-docker-image.tar 
-    
-    - name: Upload image to S3 
-      run: aws s3 cp my-docker-image.tar s3://pod2-demo2/my-docker-image.tar
-    
-    - name: AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      #uses: einaregilsson/beanstalk-deploy@v21
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
-        
-    - name: Download S3 object 
-      uses: aws-actions/download-s3-object@v1 
-      with: 
-        bucket-name: pod2-demo2
-        object-key: my-docker-image.tar
-        path: /tmp/my-docker-image.tar
-    - name: Deploy to Elastic Beanstalk 
-      uses: aws-actions/elastic-beanstalk-deploy@v1 
-      with: 
-        application-name: Sentiment-analysis
-        environment-name: Sentiment-analysis-env
-        version-label: my-version 
-        package: /tmp/my-docker-image.tar
         
         
         
