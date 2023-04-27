@@ -36,8 +36,8 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: Sentiment Analysis
-        environment_name: SentimentAnalysis-env
+        application_name: Sentiment-analysis
+        environment_name: Sentiment-analysis-env
         version_label: final
         region: ap-south-1
         deployment_package: deploy.zip
