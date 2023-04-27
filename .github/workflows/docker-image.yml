@@ -34,8 +34,12 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
+        
+    - name: Tag docker image 
+      run: docker tag ${{ secrets.DOCKER_USERNAME }}/demo_app:latest SentimentAnalysis-env
+      
     - name: Deploy docker image to AWS EB
-      run: eb deploy --docker --image ${{ secrets.DOCKER_USERNAME }}/demo_app:latest --env SentimentAnalysis-env
+      run: eb deploy Sentiment-analysis --label SentimentAnalysis-env --staged
       
       #####Elastic Beanstalk##########################
 #     - name: AWS credentials
