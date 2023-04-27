@@ -28,21 +28,19 @@ jobs:
     - name: Pull the Docker image
       run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
       
-    - name: AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
-    
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*'
+
     - name: Deploy to EB
-      run: |
-        EB_APP_NAME="Sentiment Analysis"
-        EB_ENV_NAME="SentimentAnalysis-env"
-        DOCKER_IMAGE_NAME= ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
-        eb use $EB_APP_NAME --region ap-south-1
-        eb use $EB_ENV_NAME
-        eb deploy --staged --source docker://$DOCKER_IMAGE_NAME
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: Sentiment Analysis
+        environment_name: SentimentAnalysis-env
+        version_label: 12345
+        region: ap-south-1
+        deployment_package: deploy.zip
     
       
       #####Elastic Beanstalk##########################
