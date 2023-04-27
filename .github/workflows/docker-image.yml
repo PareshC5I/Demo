@@ -3,8 +3,8 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
 jobs:
 
@@ -38,6 +38,20 @@ jobs:
 #       run: docker push ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
 #     - name: Pull the Docker image
 #       run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
+
+
+    - name: Get Timestamp
+      uses: gerred/actions/current-time@master
+      id: current-time
+
+    - name: Run String Replace
+      uses: frabert/replace-string-action@master
+      id: format-time
+      with:
+        pattern: '[:\.]+'
+        string: "${{ steps.current-time.outputs.time }}"
+        replace-with: '-'
+        flags: 'g'
       
     - name: Generate deployment package
       run: zip -r deploy.zip * -x "**node_modules**"
@@ -49,7 +63,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: Sentiment-analysis
         environment_name: Sentiment-analysis-env
-        version_label: final2
+        version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
         region: ap-south-1
         deployment_package: deploy.zip
     
