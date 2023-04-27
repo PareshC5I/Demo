@@ -47,7 +47,8 @@ jobs:
        eb use SentimentAnalysis-env
       
     - name: Deploy docker image to AWS EB
-      run: eb deploy ${{ secrets.DOCKER_USERNAME }}/demo_app:latest --staged
+      run: |
+        eb deploy ${{ secrets.DOCKER_USERNAME }}/demo_app:latest --staged
       
       #####Elastic Beanstalk##########################
 #     - name: AWS credentials
