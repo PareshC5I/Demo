@@ -111,6 +111,6 @@ jobs:
         environment_name: Sentiment-analysis-env
         version_label: ${{ github.sha }}
         #version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
-        #region: ap-south-1
+        region: ap-south-1
         #deployment_package: deploy.zip
     
