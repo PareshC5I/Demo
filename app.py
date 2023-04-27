@@ -1,7 +1,7 @@
 import streamlit as st  
 from textblob import TextBlob
 
-st.set_page_config(page_title="Sentiment Analysisr", 
+st.set_page_config(page_title="Sentiment Analysis", 
 page_icon=":shark:", 
 layout="centered", 
 initial_sidebar_state="auto", 
