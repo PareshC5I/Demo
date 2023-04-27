@@ -25,27 +25,39 @@ jobs:
     - name: Push the Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
       
-      #####Elastic Beanstalk##########################
+    - name: Pull the Docker image
+      run: docker pull ${{ secrets.DOCKER_USERNAME }}/demo_app:latest
+      
     - name: AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
-      #uses: einaregilsson/beanstalk-deploy@v21
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-south-1
-       # application_name: Sentiment Analysis
-       # environment_name: SentimentAnalysis-env
-       # version_label: 12345
-        #region: ap-south-1
-       # deployment_package: deploy.zip
-    - name: Install AWS EB CLI
-      run: |
-        sudo apt-get update && sudo apt-get install -y python3-pip
-        sudo pip3 install awsebcli
-    - name: Deploy to Elastic Beanstalk
-      run: |
-        eb init -p docker Sentiment-analysis --region ap-south-1
-        eb deploy Sentiment-analysis-env --staged --label "github-actions"
+    - name: Deploy docker image to AWS EB
+      run: eb deploy --docker --image ${{ secrets.DOCKER_USERNAME }}/demo_app:latest --env SentimentAnalysis-env
+      
+      #####Elastic Beanstalk##########################
+#     - name: AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       #uses: einaregilsson/beanstalk-deploy@v21
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: ap-south-1
+#        # application_name: Sentiment Analysis
+#        # environment_name: SentimentAnalysis-env
+#        # version_label: 12345
+#         #region: ap-south-1
+#        # deployment_package: deploy.zip
+#     - name: Install AWS EB CLI
+#       run: |
+#         sudo apt-get update && sudo apt-get install -y python3-pip
+#         sudo pip3 install awsebcli
+#     - name: Deploy to Elastic Beanstalk
+#       run: |
+#         eb init -p docker Sentiment-analysis --region ap-south-1
+#         eb deploy Sentiment-analysis-env --staged --label "github-actions"
      
     ###################################################
 #     - name: Checkout source code
