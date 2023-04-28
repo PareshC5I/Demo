@@ -77,7 +77,7 @@ jobs:
         version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
         region: ap-south-1
         #deployment_package: deploy.zip
-        deployment_package: docker.aws.json
+        deployment_package: Dockerrun.aws.json
     
       
       #####Elastic Beanstalk##########################
