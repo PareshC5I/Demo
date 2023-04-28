@@ -1,7 +1,7 @@
 import streamlit as st  
 from textblob import TextBlob
 
-st.set_page_config(page_title="Sentiment Analysiss", 
+st.set_page_config(page_title="Sentiment Analysis", 
 page_icon=":shark:", 
 layout="centered", 
 initial_sidebar_state="auto", 
@@ -22,7 +22,7 @@ def main():
 	menu = ["Analyzer"]
 
 	if menu:
-		st.write("Type anything below and analyze the sentiment of the text.")
+		st.write("Type anything below and analyze sentiment of the text.")
 		with st.form(key='nlpForm'):
 			raw_text = st.text_area("", placeholder="Enter text here...")
 			submit_button = st.form_submit_button(label='Analyze')
