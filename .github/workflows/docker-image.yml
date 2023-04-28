@@ -62,24 +62,25 @@ jobs:
         
       ########################################################new#################
       
-#     - name: Generate deployment package
-#       #run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
-#       #run: zip -r deploy.zip * -x "**node_modules**"
-#       run: zip -r deploy.zip . -x '*.git*'
+    - name: Generate deployment package
+      #run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
+      #run: zip -r deploy.zip * -x "**node_modules**"
+      run: zip -r deploy.zip . -x '*.git*'
 
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v21
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: Sentiment-analysis
-        environment_name: Sentiment-analysis-env
+        application_name: final-demo
+        environment_name: Final-demo-env
         version_label: "docker-app-${{ steps.format-time.outputs.replaced }}"
         region: ap-south-1
-        #deployment_package: deploy.zip
-        deployment_package: Dockerrun.aws.json
+        deployment_package: deploy.zip
+        #deployment_package: Dockerrun.aws.json
     
-      
+#       application_name: Sentiment-analysis
+#         environment_name: Sentiment-analysis-env
       #####Elastic Beanstalk##########################
 #     - name: AWS credentials
 #       uses: aws-actions/configure-aws-credentials@v1
