@@ -14,6 +14,6 @@ Steps
 - Created the application and environment in AWS Elastic Beanstalk. 
 - Saving all the necessary credentials to GitHub secrets.
 - Run yml file for building and pushing the docker image to dockerhub then zip all the files together and then deploy it to AWS Elastic Beanstalk.
-- Use the URL generated from AWS Elastic Beanstalk to access the Streamlit App
+- Use the URL generated from AWS Elastic Beanstalk to access the Streamlit App.
 Making or pushing any changes to the GitHub runs the yml file and the AWS Elastic Beanstalk URL is updated.
 
