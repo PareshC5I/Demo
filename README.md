@@ -1,4 +1,5 @@
 **Simple Sentiment Analysis Streamlit App**
+
 This GitHub repository contains sentiment analysis app and all the required files for deploying it to AWS Beanstalk. By simply inputting the text into the app and clicking "Analyze," users can quickly receive an overview of the positive, negative, and neutral sentiment within the text. Below is the logical architecture diagram and explanation.
 
 ![MicrosoftTeams-image](https://github.com/PareshC5I/Demo/assets/101194021/ca6c5f41-dbbe-445d-957e-e969c4573f24)
